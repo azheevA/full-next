@@ -12,6 +12,7 @@ import {
 } from "@/shared/ui/card";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/shared/ui/field";
 import { Input } from "@/shared/ui/input";
+import { Button } from "@/shared/ui/button";
 
 type SignUpSchema = z.infer<typeof signUpSchema>;
 
@@ -53,6 +54,37 @@ const SignUp = () => {
                 </Field>
               )}
             />
+            <Controller
+              name="email"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel>Email</FieldLabel>
+                  <Input placeholder="your@gmail.com" type="email" {...field} />
+                  {fieldState.error && (
+                    <FieldError
+                      errors={[{ message: fieldState.error.message }]}
+                    />
+                  )}
+                </Field>
+              )}
+            />
+            <Controller
+              name="password"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field>
+                  <FieldLabel>Password</FieldLabel>
+                  <Input placeholder="*****" type="password" {...field} />
+                  {fieldState.error && (
+                    <FieldError
+                      errors={[{ message: fieldState.error.message }]}
+                    />
+                  )}
+                </Field>
+              )}
+            />
+            <Button>Sign Up</Button>
           </FieldGroup>
         </form>
       </CardContent>
