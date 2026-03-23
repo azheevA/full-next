@@ -46,7 +46,9 @@ const SignUp = () => {
                   <FieldLabel>Full Name</FieldLabel>
                   <Input placeholder="John Doe" {...field} />
                   {fieldState.error && (
-                    <FieldError errors={[fieldState.error.message]} />
+                    <FieldError
+                      errors={[{ message: fieldState.error.message }]}
+                    />
                   )}
                 </Field>
               )}
