@@ -38,14 +38,18 @@ const SignUp = () => {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <FieldGroup>
+          <FieldGroup className="space-y-4">
             <Controller
               name="name"
               control={control}
               render={({ field, fieldState }) => (
                 <Field>
                   <FieldLabel>Full Name</FieldLabel>
-                  <Input placeholder="John Doe" {...field} />
+                  <Input
+                    aria-invalid={fieldState.invalid}
+                    placeholder="John Doe"
+                    {...field}
+                  />
                   {fieldState.error && (
                     <FieldError
                       errors={[{ message: fieldState.error.message }]}
@@ -60,7 +64,12 @@ const SignUp = () => {
               render={({ field, fieldState }) => (
                 <Field>
                   <FieldLabel>Email</FieldLabel>
-                  <Input placeholder="your@gmail.com" type="email" {...field} />
+                  <Input
+                    aria-invalid={fieldState.invalid}
+                    placeholder="your@gmail.com"
+                    type="email"
+                    {...field}
+                  />
                   {fieldState.error && (
                     <FieldError
                       errors={[{ message: fieldState.error.message }]}
@@ -75,7 +84,12 @@ const SignUp = () => {
               render={({ field, fieldState }) => (
                 <Field>
                   <FieldLabel>Password</FieldLabel>
-                  <Input placeholder="*****" type="password" {...field} />
+                  <Input
+                    aria-invalid={fieldState.invalid}
+                    placeholder="*****"
+                    type="password"
+                    {...field}
+                  />
                   {fieldState.error && (
                     <FieldError
                       errors={[{ message: fieldState.error.message }]}
