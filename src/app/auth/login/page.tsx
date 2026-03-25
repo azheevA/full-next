@@ -12,12 +12,16 @@ import {
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/shared/ui/field";
 import { Input } from "@/shared/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 const Login = () => {
+  const [isPending, startTransition] = useTransition();
+
   type signInSchema = z.infer<typeof signInSchema>;
   const { control, handleSubmit } = useForm<signInSchema>({
     resolver: zodResolver(signInSchema),
@@ -27,20 +31,22 @@ const Login = () => {
     },
   });
   const router = useRouter();
-  const onSubmit = async (data: signInSchema) => {
-    await authClient.signIn.email({
-      email: data.email,
-      password: data.password,
-      fetchOptions: {
-        onSuccess: () => {
-          toast.success("Login successfully");
-          router.push("/");
-          router.refresh();
+  const onSubmit = (data: signInSchema) => {
+    startTransition(async () => {
+      await authClient.signIn.email({
+        email: data.email,
+        password: data.password,
+        fetchOptions: {
+          onSuccess: () => {
+            toast.success("Logged in successfully");
+            router.push("/");
+            router.refresh();
+          },
+          onError: (e) => {
+            toast.error(e.error.message);
+          },
         },
-        onError: (e) => {
-          toast.error(e.error.message);
-        },
-      },
+      });
     });
   };
   return (
@@ -92,7 +98,16 @@ const Login = () => {
                 </Field>
               )}
             />
-            <Button>Sign In</Button>
+            <Button disabled={isPending}>
+              {isPending ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  <span>Loading ...</span>
+                </>
+              ) : (
+                <span>Login</span>
+              )}
+            </Button>
           </FieldGroup>
         </form>
       </CardContent>

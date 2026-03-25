@@ -16,10 +16,13 @@ import { Button } from "@/shared/ui/button";
 import { authClient } from "@/shared/lib/auth-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { useTransition } from "react";
 
 type SignUpSchema = z.infer<typeof signUpSchema>;
 
 const SignUp = () => {
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const { control, handleSubmit } = useForm<SignUpSchema>({
     resolver: zodResolver(signUpSchema),
@@ -30,21 +33,23 @@ const SignUp = () => {
     },
   });
 
-  const onSubmit = async (data: SignUpSchema) => {
-    await authClient.signUp.email({
-      email: data.email,
-      name: data.name,
-      password: data.password,
-      fetchOptions: {
-        onSuccess: () => {
-          toast.success("Account created successfully");
-          router.push("/");
-          router.refresh();
+  const onSubmit = (data: SignUpSchema) => {
+    startTransition(async () => {
+      await authClient.signUp.email({
+        email: data.email,
+        name: data.name,
+        password: data.password,
+        fetchOptions: {
+          onSuccess: () => {
+            toast.success("Account created successfully");
+            router.push("/");
+            router.refresh();
+          },
+          onError: (e) => {
+            toast.error(e.error.message);
+          },
         },
-        onError: (e) => {
-          toast.error(e.error.message);
-        },
-      },
+      });
     });
   };
 
@@ -116,7 +121,16 @@ const SignUp = () => {
                 </Field>
               )}
             />
-            <Button>Sign Up</Button>
+            <Button>
+              {isPending ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  <span>Loading ...</span>
+                </>
+              ) : (
+                <span>Sign Up</span>
+              )}
+            </Button>
           </FieldGroup>
         </form>
       </CardContent>
