@@ -13,10 +13,14 @@ import {
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/shared/ui/field";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
+import { authClient } from "@/shared/lib/auth-client";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type SignUpSchema = z.infer<typeof signUpSchema>;
 
 const SignUp = () => {
+  const router = useRouter();
   const { control, handleSubmit } = useForm<SignUpSchema>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -26,8 +30,22 @@ const SignUp = () => {
     },
   });
 
-  const onSubmit = (data: SignUpSchema) => {
-    console.log(data);
+  const onSubmit = async (data: SignUpSchema) => {
+    await authClient.signUp.email({
+      email: data.email,
+      name: data.name,
+      password: data.password,
+      fetchOptions: {
+        onSuccess: () => {
+          toast.success("Account created successfully");
+          router.push("/");
+          router.refresh();
+        },
+        onError: (e) => {
+          toast.error(e.error.message);
+        },
+      },
+    });
   };
 
   return (

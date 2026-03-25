@@ -1,13 +1,17 @@
+import { isAuthenticated } from "@/shared/lib/auth-server";
 import NavBar from "@/widgets/navbar/ui/navbar";
-import { ReactNode } from "react";
 
-const layout = ({ children }: { children: ReactNode }) => {
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const hasToken = await isAuthenticated();
+
   return (
-    <>
-      <NavBar />
+    <div>
+      <NavBar hasToken={!!hasToken} />
       {children}
-    </>
+    </div>
   );
-};
-
-export default layout;
+}

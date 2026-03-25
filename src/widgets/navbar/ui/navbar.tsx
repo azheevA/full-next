@@ -1,8 +1,16 @@
-import { buttonVariants } from "@/shared/ui/button";
+"use client";
+import { authClient } from "@/shared/lib/auth-client";
+import { Button, buttonVariants } from "@/shared/ui/button";
+import { Toaster } from "@/shared/ui/sonner";
 import { ThemeToggle } from "@/shared/ui/theme-toggle";
+import { useConvexAuth } from "convex/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
-function NavBar() {
+const NavBar = ({ hasToken }: { hasToken: boolean }) => {
+  const router = useRouter();
+  const { isLoading } = useConvexAuth();
   return (
     <nav className="w-full py-5 flex items-center justify-between">
       <div className="flex items-center gap-8">
@@ -25,22 +33,44 @@ function NavBar() {
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <Link
-          className={buttonVariants({ variant: "default" })}
-          href="/auth/sign-up"
-        >
-          Sign Up
-        </Link>
-        <Link
-          className={buttonVariants({ variant: "secondary" })}
-          href="/auth/login"
-        >
-          Login
-        </Link>
+        {isLoading ? null : hasToken ? (
+          <Button
+            onClick={() =>
+              authClient.signOut({
+                fetchOptions: {
+                  onSuccess: () => {
+                    toast.success("Logged out successfully");
+                    router.refresh();
+                  },
+                  onError: (e) => {
+                    toast.error(e.error.message);
+                  },
+                },
+              })
+            }
+          >
+            Logout
+          </Button>
+        ) : (
+          <>
+            <Link
+              className={buttonVariants({ variant: "default" })}
+              href="/auth/sign-up"
+            >
+              Sign Up
+            </Link>
+            <Link
+              className={buttonVariants({ variant: "secondary" })}
+              href="/auth/login"
+            >
+              Login
+            </Link>
+          </>
+        )}
+
         <ThemeToggle />
       </div>
     </nav>
   );
-}
-
+};
 export default NavBar;
