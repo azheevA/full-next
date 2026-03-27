@@ -16,6 +16,7 @@ export function ConvexClientProvider({
   children: ReactNode;
   initialToken?: string | null;
 }) {
+  console.log("initialToken:", initialToken);
   return (
     <ConvexBetterAuthProvider
       client={convex}

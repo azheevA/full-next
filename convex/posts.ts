@@ -14,6 +14,8 @@ export const createPost = mutation({
       body: args.body,
       authorId: user._id,
     });
+    const identity = await ctx.auth.getUserIdentity();
+    console.log("IDENTITY:", identity);
     return blogArticle;
   },
 });

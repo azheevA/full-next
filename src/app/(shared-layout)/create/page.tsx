@@ -15,9 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "convex/react";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
-import { api } from "../../../../convex/_generated/api";
-import { title } from "process";
-import { v } from "convex/values";
+import { api } from "@@/convex/_generated/api";
 
 export default function CreatePage() {
   const mutation = useMutation(api.posts.createPost);
@@ -58,7 +56,7 @@ export default function CreatePage() {
                     <FieldLabel>Title</FieldLabel>
                     <Input
                       aria-invalid={fieldState.invalid}
-                      placeholder="Article"
+                      placeholder="Title of article"
                       {...field}
                     />
                     {fieldState.error && (
