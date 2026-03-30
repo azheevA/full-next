@@ -16,8 +16,15 @@ import { useMutation } from "convex/react";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { api } from "@@/convex/_generated/api";
+import { useTransition } from "react";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { createBlogAction } from "@/app/action";
 
 export default function CreatePage() {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
   const mutation = useMutation(api.posts.createPost);
   type BlogSchema = z.infer<typeof blogSchema>;
   const { control, handleSubmit } = useForm<BlogSchema>({
@@ -28,7 +35,16 @@ export default function CreatePage() {
     },
   });
   function onSubmit(values: BlogSchema) {
-    mutation({ title: values.title, body: values.content });
+    startTransition(async () => {
+      try {
+        mutation({ title: values.title, body: values.content });
+        await createBlogAction();
+        toast.success("post is created successfully");
+        router.push("/");
+      } catch {
+        toast.error("something's wrong");
+      }
+    });
   }
   return (
     <div className="py-12 ">
@@ -86,7 +102,16 @@ export default function CreatePage() {
                   </Field>
                 )}
               />
-              <Button>Create Post</Button>
+              <Button disabled={isPending}>
+                {isPending ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" />
+                    <span>Loading ...</span>
+                  </>
+                ) : (
+                  <span>Create Post</span>
+                )}
+              </Button>
             </FieldGroup>
           </form>
         </CardContent>
