@@ -12,10 +12,10 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "@/shared/ui/field";
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "convex/react";
+// import { useMutation } from "convex/react";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
-import { api } from "@@/convex/_generated/api";
+// import { api } from "@@/convex/_generated/api";
 import { useTransition } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -25,7 +25,7 @@ import { createBlogAction } from "@/app/action";
 export default function CreatePage() {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  const mutation = useMutation(api.posts.createPost);
+  // const mutation = useMutation(api.posts.createPost);
   type BlogSchema = z.infer<typeof blogSchema>;
   const { control, handleSubmit } = useForm<BlogSchema>({
     resolver: zodResolver(blogSchema),
@@ -37,12 +37,12 @@ export default function CreatePage() {
   function onSubmit(values: BlogSchema) {
     startTransition(async () => {
       try {
-        mutation({ title: values.title, body: values.content });
-        await createBlogAction();
+        // mutation({ title: values.title, body: values.content });
+        await createBlogAction(values);
         toast.success("post is created successfully");
         router.push("/");
       } catch {
-        toast.error("something's wrong");
+        toast.error("something went wrong");
       }
     });
   }
