@@ -32,6 +32,7 @@ export default function CreatePage() {
     defaultValues: {
       title: "",
       content: "",
+      image: undefined,
     },
   });
   function onSubmit(values: BlogSchema) {
@@ -93,6 +94,30 @@ export default function CreatePage() {
                       aria-invalid={fieldState.invalid}
                       placeholder="We can write article"
                       {...field}
+                    />
+                    {fieldState.error && (
+                      <FieldError
+                        errors={[{ message: fieldState.error.message }]}
+                      />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="image"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <Field>
+                    <FieldLabel>Image</FieldLabel>
+                    <Input
+                      type="file"
+                      aria-invalid={fieldState.invalid}
+                      accept="image/*"
+                      placeholder="Upload an image"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        field.onChange(file);
+                      }}
                     />
                     {fieldState.error && (
                       <FieldError
