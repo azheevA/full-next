@@ -41,7 +41,7 @@ export default function CreatePage() {
         // mutation({ title: values.title, body: values.content });
         await createBlogAction(values);
         toast.success("post is created successfully");
-        router.push("/");
+        router.push("/blog");
       } catch {
         toast.error("something went wrong");
       }

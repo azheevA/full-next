@@ -10,6 +10,8 @@ import { api } from "@@/convex/_generated/api";
 import { Suspense } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
 
+// export const dynamic = "force-static";
+// export const revalidate = 30;
 export default function BlogPage() {
   // const data = useQuery(api.posts.getPosts);
   // const data = await fetchQuery(api.posts.getPosts);
@@ -32,9 +34,9 @@ export default function BlogPage() {
 }
 
 async function LoadBlogList() {
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
   const data = await fetchQuery(api.posts.getPosts);
-  console.log("FIRST POST URL:", data[0]?.imageUrl);
+
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {data?.map((post) => (

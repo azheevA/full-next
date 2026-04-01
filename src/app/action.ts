@@ -4,6 +4,7 @@ import { blogSchema } from "@/shared/api/blog";
 import { getToken } from "@/shared/lib/auth-server";
 import { api } from "@@/convex/_generated/api";
 import { fetchMutation } from "convex/nextjs";
+import { revalidatePath } from "next/cache";
 
 import z from "zod";
 
@@ -47,4 +48,5 @@ export async function createBlogAction(values: z.infer<typeof blogSchema>) {
     console.error("Error creating post:", error);
     throw new Error("Failed to create post");
   }
+  revalidatePath("/blog");
 }
