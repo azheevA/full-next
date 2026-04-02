@@ -1,7 +1,6 @@
 "use client";
 import { authClient } from "@/shared/lib/auth-client";
 import { Button, buttonVariants } from "@/shared/ui/button";
-import { Toaster } from "@/shared/ui/sonner";
 import { ThemeToggle } from "@/shared/ui/theme-toggle";
 import { useConvexAuth } from "convex/react";
 import Link from "next/link";

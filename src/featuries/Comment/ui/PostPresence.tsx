@@ -10,7 +10,11 @@ interface PostPresenceProps {
   userId: string;
 }
 export function PostPresence({ roomId, userId }: PostPresenceProps) {
-  const presenceState = usePresence(api.presence, roomId, userId);
+  const presenceState = usePresence(
+    api.presence as unknown as Parameters<typeof usePresence>[0],
+    roomId,
+    userId,
+  );
 
   if (!presenceState || presenceState.length === 0) {
     return null;
