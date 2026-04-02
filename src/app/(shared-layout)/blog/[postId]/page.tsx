@@ -6,6 +6,9 @@ import Image from "next/image";
 import { Separator } from "@/shared/ui/separator";
 import { CommentSection } from "@/featuries/Comment/ui/CommentSection";
 import { Metadata } from "next";
+import { PostPresence } from "@/featuries/Comment/ui/PostPresence";
+import { getToken } from "@/shared/lib/auth-server";
+import { redirect } from "next/navigation";
 interface PostIdRouteProps {
   params: Promise<{
     postId: Id<"posts">;
@@ -46,10 +49,15 @@ export async function generateMetadata({
 export default async function PostIdRoute({ params }: PostIdRouteProps) {
   const { postId } = await params;
   if (!postId) return <div>Invalid post ID</div>;
-  const [post, preloadedComments] = await Promise.all([
+  const token = await getToken();
+  const [post, preloadedComments, userId] = await Promise.all([
     fetchQuery(api.posts.getPostById, { postId }),
     preloadQuery(api.comments.getCommentsbyPostId, { postId }),
+    fetchQuery(api.presence.getUserId, {}, { token }),
   ]);
+  if (!userId) {
+    return redirect("/auth/login");
+  }
 
   if (!post) {
     return (
@@ -79,14 +87,17 @@ export default async function PostIdRoute({ params }: PostIdRouteProps) {
         <h1 className="text-4xl font-bold mb-4 tracking-tight text-foreground">
           {post.title}
         </h1>
-        <p className="text-sm text-muted-foreground">
-          Posted on:{" "}
-          {new Date(post._creationTime).toLocaleDateString("en-US", {
-            day: "numeric",
-            year: "numeric",
-            month: "long",
-          })}
-        </p>
+        <div className="flex items-center gap-2">
+          <p className="text-sm text-muted-foreground">
+            Posted on:{" "}
+            {new Date(post._creationTime).toLocaleDateString("en-US", {
+              day: "numeric",
+              year: "numeric",
+              month: "long",
+            })}
+          </p>
+          {userId && <PostPresence roomId={post._id} userId={userId} />}
+        </div>
         <Separator className="my-4" />
         <p className=" text-lg leading-relaxed text-foreground/90">
           {post.body}
