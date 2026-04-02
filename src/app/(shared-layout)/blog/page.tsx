@@ -9,9 +9,17 @@ import { fetchQuery } from "convex/nextjs";
 import { api } from "@@/convex/_generated/api";
 import { Suspense } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
+import { Metadata } from "next";
 
 // export const dynamic = "force-static";
 // export const revalidate = 30;
+export const metadata: Metadata = {
+  title: "Blog",
+  description: "Insights, thoughts, and trends from our team",
+  category: "Web development",
+  authors: [{ name: "Azheev Alexandr" }],
+};
+
 export default function BlogPage() {
   // const data = useQuery(api.posts.getPosts);
   // const data = await fetchQuery(api.posts.getPosts);

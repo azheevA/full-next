@@ -4,7 +4,7 @@ import { authComponent } from "./auth";
 
 export const getCommentsbyPostId = query({
   args: {
-    postId: v.id("posts"),
+    postId: v.optional(v.id("posts")),
   },
   handler: async (ctx, args) => {
     const data = await ctx.db
