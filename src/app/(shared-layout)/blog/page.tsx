@@ -1,5 +1,5 @@
 // "use client";
-import { Button, buttonVariants } from "@/shared/ui/button";
+import { buttonVariants } from "@/shared/ui/button";
 import { Card, CardContent, CardFooter } from "@/shared/ui/card";
 // import { api } from "@@/convex/_generated/api";
 // import { useQuery } from "convex/react";
