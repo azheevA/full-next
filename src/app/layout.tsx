@@ -5,6 +5,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/providers/ThemeProviders";
 import { Toaster } from "@/shared/ui/sonner";
 import { ConvexClientWrapper } from "@/providers/ConvexClientProvider";
+import Loading from "./(loading)/loadingHome";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({
@@ -36,7 +37,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <main className="max-w-7xl mx-auto w-full px-4 md:px-5 lg:px-8">
-            <Suspense fallback={<div>Loading auth...</div>}>
+            <Suspense fallback={<Loading />}>
               <ConvexClientWrapper>{children}</ConvexClientWrapper>
             </Suspense>
           </main>
