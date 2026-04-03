@@ -13,15 +13,16 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "@/shared/ui/field";
 import { Input } from "@/shared/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-const Login = () => {
+export const Login = () => {
   const [isPending, startTransition] = useTransition();
-
+  const hasShownToast = useRef(false);
+  const searchParams = useSearchParams();
   type signInSchema = z.infer<typeof signInSchema>;
   const { control, handleSubmit } = useForm<signInSchema>({
     resolver: zodResolver(signInSchema),
@@ -49,6 +50,21 @@ const Login = () => {
       });
     });
   };
+
+  useEffect(() => {
+    const error = searchParams.get("error");
+
+    if (error === "unauthorized" && !hasShownToast.current) {
+      toast.error("Session expired or you must be logged in", {
+        classNames: {
+          toast: "bg-red-50 border-red-200",
+          title: "text-red-600",
+          icon: "text-red-600",
+        },
+      });
+      hasShownToast.current = true;
+    }
+  }, [searchParams]);
   return (
     <Card>
       <CardHeader>
