@@ -1,4 +1,5 @@
 "use client";
+import { SearchInput } from "@/featuries/GlobalSearch/ui/SearchInput";
 import { authClient } from "@/shared/lib/auth-client";
 import { Button, buttonVariants } from "@/shared/ui/button";
 import { ThemeToggle } from "@/shared/ui/theme-toggle";
@@ -32,6 +33,9 @@ const NavBar = ({ hasToken }: { hasToken: boolean }) => {
         </div>
       </div>
       <div className="flex items-center gap-2">
+        <div className="hidden md:block mr-2">
+          <SearchInput />
+        </div>
         {isLoading ? null : hasToken ? (
           <Button
             onClick={() =>

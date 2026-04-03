@@ -104,13 +104,13 @@ export const searchPosts = query({
     };
     const titleMatches = await ctx.db
       .query("posts")
-      .withSearchIndex("search-title", (q) => q.search("title", args.term))
+      .withSearchIndex("search_title", (q) => q.search("title", args.term))
       .take(limit);
     pushDocs(titleMatches);
     if (results.length < limit) {
       const bodyMatches = await ctx.db
         .query("posts")
-        .withSearchIndex("search-body", (q) => q.search("body", args.term))
+        .withSearchIndex("search_body", (q) => q.search("body", args.term))
         .take(limit - results.length);
       pushDocs(bodyMatches);
     }
