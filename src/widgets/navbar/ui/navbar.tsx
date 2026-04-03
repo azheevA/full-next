@@ -12,7 +12,7 @@ const NavBar = ({ hasToken }: { hasToken: boolean }) => {
   const router = useRouter();
   const { isLoading } = useConvexAuth();
   return (
-    <nav className="w-full py-5 flex items-center justify-between">
+    <nav className="w-full py-5 flex items-center justify-between relative">
       <div className="flex items-center gap-8">
         <Link href="/">
           <h1 className="text-3xl font-bold">
@@ -73,6 +73,7 @@ const NavBar = ({ hasToken }: { hasToken: boolean }) => {
 
         <ThemeToggle />
       </div>
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 md:w-1/2 h-px bg-linear-to-r from-transparent via-blue-500/50 to-transparent" />
     </nav>
   );
 };

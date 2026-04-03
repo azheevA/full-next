@@ -1,5 +1,5 @@
 // "use client";
-import { buttonVariants } from "@/shared/ui/button";
+import { Button, buttonVariants } from "@/shared/ui/button";
 import { Card, CardContent, CardFooter } from "@/shared/ui/card";
 // import { api } from "@@/convex/_generated/api";
 // import { useQuery } from "convex/react";
@@ -28,7 +28,7 @@ export default function BlogPage() {
 
   return (
     <div className="py-12">
-      <div className="text-center pb-12">
+      <div className="text-center pb-12 ">
         <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
           Blog
         </h1>
@@ -55,6 +55,39 @@ async function LoadBlogList() {
   // });
   const data = await fetchQuery(api.posts.getPosts);
 
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-center">
+        <Link href="/create" className="group flex flex-col items-center">
+          <div className="bg-primary/10 rounded-full p-4 mb-4 transition-colors group-hover:bg-primary/20">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-12 h-12 text-primary"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4.5v15m7.5-7.5h-15"
+              />
+            </svg>
+          </div>
+
+          <h3 className="text-2xl font-bold text-foreground group-hover:text-primary transition-colors">
+            No posts found
+          </h3>
+        </Link>
+
+        <p className="text-muted-foreground mt-3 mb-8 max-w-sm mx-auto text-lg">
+          The blog is currently empty. Be the first to share your thoughts with
+          the world!
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {data?.map((post) => (
