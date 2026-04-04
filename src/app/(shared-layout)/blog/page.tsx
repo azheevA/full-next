@@ -10,8 +10,8 @@ import { api } from "@@/convex/_generated/api";
 import { Suspense } from "react";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { Metadata } from "next";
-// import { connection } from "next/server";
-import { cacheLife, cacheTag } from "next/cache";
+import { connection } from "next/server";
+// import { cacheLife, cacheTag } from "next/cache";
 
 // export const dynamic = "force-static";
 // export const revalidate = 30;
@@ -45,15 +45,15 @@ export default function BlogPage() {
 
 async function LoadBlogList() {
   // await new Promise((resolve) => setTimeout(resolve, 3000));
-  "use cache";
-  cacheLife("hours");
-  cacheTag("blog");
+  // "use cache";
+  // cacheLife("hours");
+  // cacheTag("blog");
   // cacheLife({
   //   stale: 3600,
   //   revalidate: 7200,
   //   expire: 86400,
   // });
-  // await connection();
+  await connection();
   const data = await fetchQuery(api.posts.getPosts);
 
   if (!data || data.length === 0) {
