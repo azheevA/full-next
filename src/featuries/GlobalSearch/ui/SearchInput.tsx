@@ -1,18 +1,25 @@
 "use client";
 import { Input } from "@/shared/ui/input";
+import { Kbd, KbdGroup } from "@/shared/ui/kbd";
 import { api } from "@@/convex/_generated/api";
 import { useQuery } from "convex/react";
 import { Loader2, Search } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export function SearchInput() {
   const [searchTerm, setSearchTerm] = useState("");
   const [open, setOpen] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
+  useHotkeys("ctrl+k", (e) => {
+    e.preventDefault();
+    inputRef.current?.focus();
+  });
   const results = useQuery(
     api.posts.searchPosts,
-    searchTerm.length >= 2 ? { term: searchTerm, limit: 5 } : "skip",
+    searchTerm.length >= 1 ? { term: searchTerm, limit: 5 } : "skip",
   );
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -26,17 +33,27 @@ export function SearchInput() {
   };
   return (
     <div className="relative w-full max-w-sm rounded-lg">
-      <div className="relative">
-        <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
-        <Input
-          placeholder="Search..."
-          type="search"
-          className="w-full pl-8 bg-background"
-          value={searchTerm}
-          onChange={handleInputChange}
-          onFocus={() => setOpen(true)}
-          onBlur={handleBlur}
-        />
+      <div className="relative flex flex-row">
+        <div className=" absolute right-2 top-1 flex flex-col items-center gap-4">
+          <KbdGroup>
+            <Kbd>Ctrl</Kbd>
+            <span>+</span>
+            <Kbd>K</Kbd>
+          </KbdGroup>
+        </div>
+        <div className="relative w-full">
+          <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
+          <Input
+            placeholder="Search..."
+            type="search"
+            ref={inputRef}
+            className="w-full pl-8 bg-background"
+            value={searchTerm}
+            onChange={handleInputChange}
+            onFocus={() => setOpen(true)}
+            onBlur={handleBlur}
+          />
+        </div>
       </div>
 
       {open && searchTerm.length >= 2 && (

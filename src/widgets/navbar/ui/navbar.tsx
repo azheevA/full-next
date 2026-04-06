@@ -10,6 +10,7 @@ import { toast } from "sonner";
 
 const NavBar = ({ hasToken }: { hasToken: boolean }) => {
   const router = useRouter();
+
   const { isLoading } = useConvexAuth();
   return (
     <nav className="w-full py-5 flex items-center justify-between relative">
